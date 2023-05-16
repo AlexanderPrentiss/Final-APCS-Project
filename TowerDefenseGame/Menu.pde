@@ -25,10 +25,6 @@ public class Menu {
   }
 }
 
-class Settings {
-
-}
-
 class Button {
   
   private PVector size;
