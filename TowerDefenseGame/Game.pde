@@ -27,25 +27,27 @@ class Enemy {
 }
 
 class Map {
-  Tile[][] map = new Tile[10][7];
+  private Tile[][] map = new Tile[10][7];
   
-  public Map(Tile[][] map){
-    /*for (int row = 0; row < map.length; row++){
-      for (int col = 0; col < map[row].length; col++){
-        this.map[row][col] = map[row][col];
-      } 
-    }*/
-    this.map = map;
+  public Map(int[][] bitMap){
+    for(int row = 0; row < map.length; row++) {
+      for (int col = 0; col < map[row].length; col++) {
+        this.map[row][col] = new Tile(width/10, bitMap[row][col]);
+      }
+    }
   }
   
   public void drawMap() {
-    rectMode(CORNER); 
-    
-    for (int row = 0; row < map.length; row++){
-    for (int col = 0; col < map[row].length; col++){
-      map[row][col].drawTile(1+col*map[row][col].getSize(), 1+row*map[row][col].getSize());
+    rectMode(CORNER);  
+    for(int row = 0; row < map.length; row++) {
+      for (int col = 0; col < map[row].length; col++) {
+        map[row][col].drawTile(row*(width/10), col*(width/10));
+      }
     }
   }
+  
+  public Tile[][] getTileMap() {
+    return this.map;
   }
 }
 
@@ -54,11 +56,21 @@ class Tile {
   private boolean walkable;
   private boolean buildable;
   private PVector position;
+  private int type;
   
-  public Tile(int size, boolean walkable, boolean buildable){
+  public Tile(int size, int type){
     this.size = size;
-    this.walkable = walkable;
-    this.buildable = buildable;
+    this.type = type;
+    if (type == 1) {
+      this.walkable = true;
+      this.buildable = false;
+    } else if (type == 2) {
+      this.walkable = false;
+      this.buildable = true;
+    } else {
+      this.walkable = false;
+      this.buildable = false;
+    }
   }
   
   public void drawTile(int x, int y) {
@@ -83,6 +95,10 @@ class Tile {
   
   public int getSize() {
     return size;
+  }
+  
+  public int getType() {
+    return type;
   }
   
   public boolean hover()  {
