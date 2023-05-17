@@ -53,6 +53,7 @@ class Tile {
   private int size;
   private boolean walkable;
   private boolean buildable;
+  private PVector position;
   
   public Tile(int size, boolean walkable, boolean buildable){
     this.size = size;
@@ -69,6 +70,7 @@ class Tile {
     fill(#C3932C);
     
     rect(x, y, size, size);
+    this.position = new PVector(x, y);
   }
   
   public boolean isWalkable(){
@@ -81,5 +83,14 @@ class Tile {
   
   public int getSize() {
     return size;
+  }
+  
+  public boolean hover()  {
+    if (mouseX >= this.position.x && mouseX <= this.position.x+(this.size) && 
+      mouseY >= this.position.y && mouseY <= this.position.y+(this.size)) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
