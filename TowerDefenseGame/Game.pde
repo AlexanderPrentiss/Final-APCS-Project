@@ -74,7 +74,7 @@ class Tile {
   }
   
   public void drawTile(int x, int y) {
-    if (!(walkable || buildable)) 
+    if (!(walkable || buildable || type > 2)) 
     fill(#22A91D);
     else if (!walkable && buildable) 
     fill(#239122);
@@ -107,6 +107,25 @@ class Tile {
       return true;
     } else {
       return false;
+    }
+  }
+}
+
+class Tower extends Tile{
+  private int towerType;
+  private int towerRange;
+  private int towerROF;
+  private int towerSize;
+  
+  public Tower(int towerType, int size){
+    super(size, towerType);
+  }
+  
+  public void buildTile(int posX, int posY){
+    rectMode(CORNER);
+    if (this.towerType == 1) {
+      fill(#A0A0A0);
+      rect(posX, posY, towerSize, towerSize);
     }
   }
 }

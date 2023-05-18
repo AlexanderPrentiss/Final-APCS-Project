@@ -1,6 +1,9 @@
 PVector s = new PVector(100, 50);
-String mode = "mainMenu"; //mainMenu, game, pauseMenu, settingsMenu
+String mode = "mainMenu"; //mainMenu, game, pauseMenu, settingsMenu, buildMenu
 String tempMode;
+
+int tempRow;
+int tempCol;
 
 int width = 720;
 int height = 500;
@@ -38,6 +41,9 @@ Button LevelButton = new Button(s, "Level", #995A00);
 Button Back = new Button(s, "Back", #B5B5B5);
 Menu settingsMenu = new Menu("Settings", #E44523);
 
+Button ArcherTowerButton = new Button(s, "Archer", #A58200);
+Menu buildMenu = new Menu("", #FFFFFF);
+
 
 
 void setup() {
@@ -56,6 +62,9 @@ void setup() {
   settingsMenu.addButton(EnemySpeedButton);
   settingsMenu.addButton(LevelButton);
   settingsMenu.addButton(Back);
+
+  buildMenu.addButton(ArcherTowerButton);
+  buildMenu.addButton(Back);
 }
 
 void draw() {
@@ -81,6 +90,19 @@ void draw() {
     }
   } else if (mode.equals("game")) {
     basic.drawMap();
+  } else if (mode.equals("buildMenu")) {
+    basic.drawMap();
+    buildMenu.displayMenu();
+    if (ArcherTowerButton.hover()) {
+      ArcherTowerButton.changeColor(#7C6100);
+    } else {
+      ArcherTowerButton.changeColor(#A58200);
+    }
+    if (Back.hover()) {
+      Back.changeColor(#AC0000);
+    } else {
+      Back.changeColor(#FF0000);
+    }
   } else if (mode.equals("pauseMenu")) {
     pauseMenu.displayMenu();
     if (resume.hover()) {
@@ -138,7 +160,9 @@ void mousePressed() {
     for (int row = 0; row < basic.getTileMap().length; row++) {
       for (int col = 0; col < basic.getTileMap()[row].length; col++) {
         if (basic.getTileMap()[row][col].hover() && basic.getTileMap()[row][col].getType() == 2) {
-          print("BUILD");
+          tempRow = row;
+          tempCol = col;
+          mode = "buildMenu";
         }
       }
     }
@@ -149,6 +173,18 @@ void mousePressed() {
     if (settings.hover()) {
       tempMode = mode;
       mode = "settingsMenu";
+    }
+    if (quit.hover()) {
+      exit();
+    }
+  } else if (mode.equals("buildMenu")) {
+    if (Back.hover()) {
+      mode = "game";
+    }
+    if (ArcherTowerButton.hover()) {
+      //int tempSize = currentBuildTile.getSize();
+      basic.getTileMap()[tempRow][tempCol] = new Tower(width/2, 3);
+      mode = "game";
     }
     if (quit.hover()) {
       exit();
