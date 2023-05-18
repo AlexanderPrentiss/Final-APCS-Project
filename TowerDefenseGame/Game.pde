@@ -1,51 +1,49 @@
 public class Game {
   private int playerHealth;
   private int level;
-  
+
   public Game(int playerHealth, int level) {
     this.playerHealth = playerHealth;
     this.level = level;
   }
-  
+
   public void startGame() {
-    
   }
 }
 
 class Enemy {
   private int enemyHealth;
   private int enemySpeed;
-  
-  public Enemy(int enemyHealth, int enemySpeed){
+
+  public Enemy(int enemyHealth, int enemySpeed) {
     this.enemyHealth = enemyHealth;
     this.enemySpeed = enemySpeed;
   }
-  
+
   public void march(PVector spawnPoint) {
-  
   }
 }
 
 class Map {
-  private Tile[][] map = new Tile[10][7];
-  
-  public Map(int[][] bitMap){
-    for(int row = 0; row < map.length; row++) {
+  private Tile[][] map = new Tile[7][10];
+
+  public Map(int[][] bitMap) {
+    for (int row = 0; row < map.length; row++) {
       for (int col = 0; col < map[row].length; col++) {
         this.map[row][col] = new Tile(width/10, bitMap[row][col]);
       }
     }
   }
-  
+
   public void drawMap() {
-    rectMode(CORNER);  
-    for(int row = 0; row < map.length; row++) {
+    rectMode(CORNER);
+    for (int row = 0; row < map.length; row++) {
       for (int col = 0; col < map[row].length; col++) {
-        map[row][col].drawTile(row*(width/10), col*(width/10));
+        map[row][col].drawTile(col*(width/10), row*(width/10));
       }
     }
   }
-  
+
   public Tile[][] getTileMap() {
     return this.map;
   }
@@ -57,8 +55,8 @@ class Tile {
   private boolean buildable;
   private PVector position;
   private int type;
-  
-  public Tile(int size, int type){
+
+  public Tile(int size, int type) {
     this.size = size;
     this.type = type;
     if (type == 1) {
@@ -72,37 +70,48 @@ class Tile {
       this.buildable = false;
     }
   }
-  
+
   public void drawTile(int x, int y) {
-    if (!(walkable || buildable || type > 2)) 
-    fill(#22A91D);
-    else if (!walkable && buildable) 
-    fill(#239122);
-    else if (walkable && !buildable) 
-    fill(#C3932C);
-    
+    if (!(walkable || buildable || type > 2))
+      fill(#22A91D);
+    else if (!walkable && buildable)
+      fill(#239122);
+    else if (walkable && !buildable)
+      fill(#C3932C);
     rect(x, y, size, size);
     this.position = new PVector(x, y);
   }
-  
-  public boolean isWalkable(){
+
+  public boolean isWalkable() {
     return walkable;
   }
-  
-  public boolean isBuildable(){
+
+  public boolean isBuildable() {
     return buildable;
   }
-  
+
   public int getSize() {
     return size;
   }
   
+  public void setPosition(PVector position) {
+    this.position = (position);
+  }
+
   public int getType() {
     return type;
   }
-  
-  public boolean hover()  {
-    if (mouseX >= this.position.x && mouseX <= this.position.x+(this.size) && 
+
+  public int getPosX() {
+    return (int)position.x;
+  }
+
+  public int getPosY() {
+    return (int)position.y;
+  }
+
+  public boolean hover() {
+    if (mouseX >= this.position.x && mouseX <= this.position.x+(this.size) &&
       mouseY >= this.position.y && mouseY <= this.position.y+(this.size)) {
       return true;
     } else {
@@ -111,21 +120,32 @@ class Tile {
   }
 }
 
-class Tower extends Tile{
-  private int towerType;
+class Tower extends Tile {
   private int towerRange;
   private int towerROF;
-  private int towerSize;
-  
-  public Tower(int towerType, int size){
+
+  public Tower(int towerType, int size) {
     super(size, towerType);
+    if (towerType == 3) {
+      this.towerRange = 3; 
+      this.towerROF = 2;
+    }
+  }
+
+  public void drawTile(int posX, int posY) {
+    rectMode(CORNER);
+    //if (this.getType() == 3) {
+      fill(#FE0000);
+      rect(posX, posY, this.getSize(), this.getSize());
+      fill(#686868);
+      rect(posX, posY, this.getSize()/10, this.getSize()/5);
+      rect(posX, posY, this.getSize()/5, this.getSize()/10);
+   // }
+    PVector position = new PVector(posX, posY);
+    this.setPosition(position);
   }
   
-  public void buildTile(int posX, int posY){
-    rectMode(CORNER);
-    if (this.towerType == 1) {
-      fill(#A0A0A0);
-      rect(posX, posY, towerSize, towerSize);
-    }
+  public int getRange() {
+    return this.towerRange;
   }
 }

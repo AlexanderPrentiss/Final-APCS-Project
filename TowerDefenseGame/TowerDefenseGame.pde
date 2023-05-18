@@ -4,6 +4,9 @@ String tempMode;
 
 int tempRow;
 int tempCol;
+int tempSize;
+int tempPosX;
+int tempPosY;
 
 int width = 720;
 int height = 500;
@@ -11,16 +14,13 @@ int height = 500;
 int t = width/10;
 
 int[][] basicBitMap = {
-  {0, 0, 2, 1, 2, 0, 0},
-  {0, 0, 2, 1, 2, 0, 0},
-  {0, 0, 2, 1, 2, 0, 0},
-  {0, 0, 2, 1, 2, 0, 0},
-  {0, 0, 2, 1, 2, 0, 0},
-  {0, 0, 2, 1, 2, 0, 0},
-  {0, 0, 2, 1, 2, 0, 0},
-  {0, 0, 2, 1, 2, 0, 0},
-  {0, 0, 2, 1, 2, 0, 0},
-  {0, 0, 2, 1, 2, 0, 0},
+  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+  {2, 2, 2, 2, 2, 2, 2, 2, 2, 2},
+  {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+  {2, 2, 2, 2, 2, 2, 2, 2, 2, 2},
+  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 };
 
 Map basic = new Map(basicBitMap);
@@ -182,8 +182,10 @@ void mousePressed() {
       mode = "game";
     }
     if (ArcherTowerButton.hover()) {
-      //int tempSize = currentBuildTile.getSize();
-      basic.getTileMap()[tempRow][tempCol] = new Tower(width/2, 3);
+      tempSize = basic.getTileMap()[tempRow][tempCol].getSize();
+      tempPosX = basic.getTileMap()[tempRow][tempCol].getPosX();
+      tempPosY = basic.getTileMap()[tempRow][tempCol].getPosY();
+      basic.getTileMap()[tempRow][tempCol] = new Tower(tempSize, 3);
       mode = "game";
     }
     if (quit.hover()) {

@@ -40,7 +40,6 @@ class Button {
   
   public void displayButton(int position) {
     rectMode(CENTER);
-    textMode(CENTER);
     textAlign(CENTER);
     fill(bc);
     rect(width/2, position, this.size.x, this.size.y);
