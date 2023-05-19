@@ -134,12 +134,27 @@ class Tower extends Tile {
 
   public void drawTile(int posX, int posY) {
     rectMode(CORNER);
+    //int Tsize = this.getSize();
+    int Tsize = width/10;
     //if (this.getType() == 3) {
-      fill(#FE0000);
-      rect(posX, posY, this.getSize(), this.getSize());
+      fill(#B5B5B5);
+      rect(posX, posY,Tsize, Tsize);
+      noStroke();
       fill(#686868);
-      rect(posX, posY, this.getSize()/10, this.getSize()/5);
-      rect(posX, posY, this.getSize()/5, this.getSize()/10);
+      rect(posX, posY, Tsize/10, Tsize/5);
+      rect(posX, posY, Tsize/5, Tsize/10);
+      rect(posX+(Tsize/2)-Tsize/10, posY, Tsize/5, Tsize/10);
+      rect(posX+(Tsize/2)-Tsize/10, posY+Tsize-Tsize/10, Tsize/5, Tsize/10);
+      rect(posX, posY+(Tsize/2)-Tsize/10, Tsize/10, Tsize/5);
+      rect(posX+Tsize-Tsize/10, posY+(Tsize/2)-Tsize/10, Tsize/10, Tsize/5);
+      rect(posX+Tsize-Tsize/5, posY, Tsize/5, Tsize/10);
+      rect(posX+Tsize-Tsize/10, posY, Tsize/10, Tsize/5);
+      
+      rect(posX, posY+Tsize-Tsize/5, Tsize/10, Tsize/5);
+      rect(posX, posY+Tsize-Tsize/10, Tsize/5, Tsize/10);
+      rect(posX+Tsize-Tsize/5, posY+Tsize-Tsize/10, Tsize/5, Tsize/10);
+      rect(posX+Tsize-Tsize/10, posY+Tsize-Tsize/5, Tsize/10, Tsize/5);
+      stroke(0);
    // }
     PVector position = new PVector(posX, posY);
     this.setPosition(position);
