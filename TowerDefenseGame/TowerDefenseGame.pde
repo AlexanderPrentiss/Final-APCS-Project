@@ -2,6 +2,8 @@ PVector s = new PVector(100, 50);
 String mode = "mainMenu"; //mainMenu, game, pauseMenu, settingsMenu, buildMenu
 String tempMode;
 
+Enemy enemy1 = new Enemy(100, 1);
+
 int tempRow;
 int tempCol;
 int tempSize;
@@ -65,6 +67,7 @@ void setup() {
 
   buildMenu.addButton(ArcherTowerButton);
   buildMenu.addButton(Back);
+  
 }
 
 void draw() {
@@ -90,6 +93,7 @@ void draw() {
     }
   } else if (mode.equals("game")) {
     basic.drawMap();
+    enemy1.march(basic);
   } else if (mode.equals("buildMenu")) {
     basic.drawMap();
     buildMenu.displayMenu();
@@ -185,7 +189,7 @@ void mousePressed() {
       tempSize = basic.getTileMap()[tempRow][tempCol].getSize();
       tempPosX = basic.getTileMap()[tempRow][tempCol].getPosX();
       tempPosY = basic.getTileMap()[tempRow][tempCol].getPosY();
-      basic.getTileMap()[tempRow][tempCol] = new Tower(tempSize, 3);
+      basic.getTileMap()[tempRow][tempCol] = new Tower(3, tempSize);
       mode = "game";
     }
     if (quit.hover()) {

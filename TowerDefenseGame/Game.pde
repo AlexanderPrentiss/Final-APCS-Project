@@ -14,13 +14,33 @@ public class Game {
 class Enemy {
   private int enemyHealth;
   private int enemySpeed;
+  private int posX;
+  private int posY;
+  private ArrayList<Tile> path = new ArrayList<Tile>();
 
   public Enemy(int enemyHealth, int enemySpeed) {
     this.enemyHealth = enemyHealth;
     this.enemySpeed = enemySpeed;
   }
 
-  public void march(PVector spawnPoint) {
+  public void march(Map map) {
+    fill(255, 0, 0);
+    for (int col = 0; col < map.getTileMap()[0].length; col++) {
+      for (int row = 0; row < map.getTileMap().length; row++) {
+        if (map.getTileMap()[row][col].isWalkable()) {
+          path.add(map.getTileMap()[row][col]);
+        }
+      }
+    }
+    posX = path.get(0).getPosX();
+    posY = path.get(0).getPosY() + path.get(0).getSize()/2;   
+    for (int i = 0; i < path.size(); i++) {
+      while (posX < path.get(i).getPosX() + path.get(0).getSize()/2) {
+        ellipse(posX, posY, path.get(0).getSize()/2, path.get(0).getSize()/2);
+        posX+=(10*enemySpeed);
+        basic.drawMap();
+      }
+    }
   }
 }
 
@@ -134,9 +154,9 @@ class Tower extends Tile {
 
   public void drawTile(int posX, int posY) {
     rectMode(CORNER);
-    //int Tsize = this.getSize();
-    int Tsize = width/10;
-    //if (this.getType() == 3) {
+    int Tsize = this.getSize();
+    //int Tsize = width/10;
+    if (this.getType() == 3) {
       fill(#B5B5B5);
       rect(posX, posY,Tsize, Tsize);
       noStroke();
@@ -155,7 +175,7 @@ class Tower extends Tile {
       rect(posX+Tsize-Tsize/5, posY+Tsize-Tsize/10, Tsize/5, Tsize/10);
       rect(posX+Tsize-Tsize/10, posY+Tsize-Tsize/5, Tsize/10, Tsize/5);
       stroke(0);
-   // }
+    }
     PVector position = new PVector(posX, posY);
     this.setPosition(position);
   }
