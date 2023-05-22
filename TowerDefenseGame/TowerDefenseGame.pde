@@ -2,8 +2,6 @@ PVector s = new PVector(100, 50);
 String mode = "mainMenu"; //mainMenu, game, pauseMenu, settingsMenu, buildMenu
 String tempMode;
 
-Enemy enemy1 = new Enemy(100, 1);
-
 int tempRow;
 int tempCol;
 int tempSize;
@@ -26,6 +24,7 @@ int[][] basicBitMap = {
 };
 
 Map basic = new Map(basicBitMap);
+Enemy enemy1 = new Enemy(100, 1, basic);
 
 Button start = new Button(s, "Start", #FFCC00);
 Button settings = new Button(s, "Settings", #B5B5B5);
@@ -68,6 +67,7 @@ void setup() {
   buildMenu.addButton(ArcherTowerButton);
   buildMenu.addButton(Back);
   
+  
 }
 
 void draw() {
@@ -93,7 +93,7 @@ void draw() {
     }
   } else if (mode.equals("game")) {
     basic.drawMap();
-    enemy1.march(basic);
+    enemy1.march();
   } else if (mode.equals("buildMenu")) {
     basic.drawMap();
     buildMenu.displayMenu();
