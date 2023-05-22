@@ -94,6 +94,16 @@ void draw() {
     basic.drawMap();
     enemy1.march();
     
+    for (int row = 0; row < basic.getTileMap().length; row++) {
+      for (int col = 0; col < basic.getTileMap()[row].length; col++) {
+        if (basic.getTileMap()[row][col].hover() && basic.getTileMap()[row][col].getType() == 3) {
+          if (basic.getTileMap()[row][col].withinRange(enemy1)) {
+            
+          }
+        }  
+      }
+    }
+    
   } else if (mode.equals("buildMenu")) {
     basic.drawMap();
     buildMenu.displayMenu();
@@ -189,7 +199,7 @@ void mousePressed() {
       tempSize = basic.getTileMap()[tempRow][tempCol].getSize();
       tempPosX = basic.getTileMap()[tempRow][tempCol].getPosX();
       tempPosY = basic.getTileMap()[tempRow][tempCol].getPosY();
-      basic.getTileMap()[tempRow][tempCol] = new Tower(3, tempSize);
+      basic.getTileMap()[tempRow][tempCol] = new Tower(2, tempSize);
       basic.getTileMap()[tempRow][tempCol].setPos(tempPosX, tempPosY);
       mode = "game";
     }

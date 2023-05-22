@@ -36,15 +36,23 @@ class Enemy {
   public void march() {
     fill(255, 0, 0);
       if (posX < path.get(i).getPosX() + path.get(0).getSize()/2) {
-        posX++;       
+        posX+=enemySpeed/2;       
       }
       else if (posY < path.get(i).getPosY() + path.get(0).getSize()/2) {
-        posY++;
+        posY+=enemySpeed/2;
       }
      else if (i < path.size()-1) {
         i++;
       }  
       ellipse(posX, posY, path.get(0).getSize()/2, path.get(0).getSize()/2);
+  }
+  
+  public int getPosX() {
+    return posY;
+  }
+  
+  public int getPosY() {
+    return posX;
   }
 }
 
@@ -190,5 +198,14 @@ class Tower extends Tile {
 
   public int getRange() {
     return this.towerRange;
+  }
+  
+  public boolean withinRange(Enemy enemy) {
+    int posX = this.getPosX();
+    int posY = this.getPosY();
+    int size = this.getSize();
+    boolean withinX = ((enemy.getPosX() >= (posX+size/2) - ((width/10)*this.towerRange)) && (enemy.getPosX() <= (posX+size/2) + ((width/10)*this.towerRange)));
+    boolean withinY = ((enemy.getPosY() >= (posY+size/2) - ((width/10)*this.towerRange)) && (enemy.getPosY() <= (posY+size/2) + ((width/10)*this.towerRange)));
+    return withinX && withinY;
   }
 }
