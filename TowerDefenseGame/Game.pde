@@ -199,13 +199,4 @@ class Tower extends Tile {
   public int getRange() {
     return this.towerRange;
   }
-  
-  public boolean withinRange(Enemy enemy) {
-    int posX = this.getPosX();
-    int posY = this.getPosY();
-    int size = this.getSize();
-    boolean withinX = ((enemy.getPosX() >= (posX+size/2) - ((width/10)*this.towerRange)) && (enemy.getPosX() <= (posX+size/2) + ((width/10)*this.towerRange)));
-    boolean withinY = ((enemy.getPosY() >= (posY+size/2) - ((width/10)*this.towerRange)) && (enemy.getPosY() <= (posY+size/2) + ((width/10)*this.towerRange)));
-    return withinX && withinY;
-  }
 }
