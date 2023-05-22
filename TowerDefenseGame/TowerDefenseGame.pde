@@ -16,15 +16,15 @@ int t = width/10;
 int[][] basicBitMap = {
   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-  {2, 2, 2, 2, 2, 2, 2, 2, 2, 2},
-  {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-  {2, 2, 2, 2, 2, 2, 2, 2, 2, 2},
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+  {2, 2, 2, 2, 2, 2, 0, 0, 0, 0},
+  {1, 1, 1, 1, 1, 2, 0, 0, 0, 0},
+  {2, 2, 2, 2, 1, 2, 2, 2, 2, 2},
+  {0, 0, 0, 2, 1, 1, 1, 1, 1, 1},
+  {0, 0, 0, 2, 2, 2, 2, 2, 2, 2}
 };
 
 Map basic = new Map(basicBitMap);
-Enemy enemy1 = new Enemy(100, 1, basic);
+Enemy enemy1 = new Enemy(100, 2, basic);
 
 Button start = new Button(s, "Start", #FFCC00);
 Button settings = new Button(s, "Settings", #B5B5B5);
@@ -73,7 +73,6 @@ void setup() {
 void draw() {
   background(#C1C1C1);
 
-
   if (mode.equals("mainMenu")) {
     mainMenu.displayMenu();
     if (start.hover()) {
@@ -94,6 +93,7 @@ void draw() {
   } else if (mode.equals("game")) {
     basic.drawMap();
     enemy1.march();
+    
   } else if (mode.equals("buildMenu")) {
     basic.drawMap();
     buildMenu.displayMenu();
@@ -167,7 +167,7 @@ void mousePressed() {
           tempRow = row;
           tempCol = col;
           mode = "buildMenu";
-        }
+        }  
       }
     }
   } else if (mode.equals("mainMenu")) {
@@ -190,6 +190,7 @@ void mousePressed() {
       tempPosX = basic.getTileMap()[tempRow][tempCol].getPosX();
       tempPosY = basic.getTileMap()[tempRow][tempCol].getPosY();
       basic.getTileMap()[tempRow][tempCol] = new Tower(3, tempSize);
+      basic.getTileMap()[tempRow][tempCol].setPos(tempPosX, tempPosY);
       mode = "game";
     }
     if (quit.hover()) {

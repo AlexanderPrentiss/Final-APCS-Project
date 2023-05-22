@@ -16,6 +16,7 @@ class Enemy {
   private int enemySpeed;
   private int posX;
   private int posY;
+  private int i = 0;
   private ArrayList<Tile> path = new ArrayList<Tile>();
 
   public Enemy(int enemyHealth, int enemySpeed, Map map) {
@@ -34,14 +35,16 @@ class Enemy {
 
   public void march() {
     fill(255, 0, 0);
-    for (int i = 0; i < path.size(); i++) {
-      while (posX < path.get(i).getPosX() + path.get(0).getSize()/2) {
-        ellipse(posX, posY, path.get(0).getSize()/2, path.get(0).getSize()/2);
-        posX+=(10*enemySpeed);
-        //basic.drawMap();
-        print(posX);
+      if (posX < path.get(i).getPosX() + path.get(0).getSize()/2) {
+        posX++;       
       }
-    }
+      else if (posY < path.get(i).getPosY() + path.get(0).getSize()/2) {
+        posY++;
+      }
+     else if (i < path.size()-1) {
+        i++;
+      }  
+      ellipse(posX, posY, path.get(0).getSize()/2, path.get(0).getSize()/2);
   }
 }
 
@@ -75,7 +78,8 @@ class Tile {
   private int size;
   private boolean walkable;
   private boolean buildable;
-  private PVector position;
+  private int posX;
+  private int posY;
   private int type;
 
   public Tile(int size, int type) {
@@ -100,7 +104,7 @@ class Tile {
       fill(#239122);
     else if (walkable && !buildable)
       fill(#C3932C);
-    rect(position.x, position.y, size, size);
+    rect(posX, posY, size, size);
     //this.position = new PVector(x, y);
   }
 
@@ -121,21 +125,21 @@ class Tile {
   }
   
   public void setPos(int posX, int posY) {
-    this.position.x = posX;
-    this.position.y = posY;
+    this.posX = posX;
+    this.posY = posY;
   }
 
   public int getPosX() {
-    return (int)position.x;
+    return posX;
   }
 
   public int getPosY() {
-    return (int)position.y;
+    return posY;
   }
 
   public boolean hover() {
-    if (mouseX >= this.position.x && mouseX <= this.position.x+(this.size) &&
-      mouseY >= this.position.y && mouseY <= this.position.y+(this.size)) {
+    if (mouseX >= this.posX && mouseX <= this.posX+(this.size) &&
+      mouseY >= this.posY && mouseY <= this.posY+(this.size)) {
       return true;
     } else {
       return false;
@@ -155,9 +159,11 @@ class Tower extends Tile {
     }
   }
 
-  public void drawTile(int posX, int posY) {
+  public void drawTile() {
     rectMode(CORNER);
     int Tsize = this.getSize();
+    int posX = this.getPosX();
+    int posY = this.getPosY();
     //int Tsize = width/10;
     if (this.getType() == 3) {
       fill(#B5B5B5);
