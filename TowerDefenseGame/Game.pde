@@ -1,15 +1,3 @@
-public class Game {
-  private int playerHealth;
-  private int level;
-
-  public Game(int playerHealth, int level) {
-    this.playerHealth = playerHealth;
-    this.level = level;
-  }
-
-  public void startGame() {
-  }
-}
 
 class Enemy {
   private int enemyHealth;
@@ -35,7 +23,8 @@ class Enemy {
 
   public void march() {
     fill(255, 0, 0);
-      if (posX < path.get(i).getPosX() + path.get(0).getSize()/2) {
+    while (posX < path.get(path.size()-1).getPosX() && posY < path.get(path.size()-1).getPosY()) {
+     if (posX < path.get(i).getPosX() + path.get(0).getSize()/2) {
         posX+=enemySpeed/2;       
       }
       else if (posY < path.get(i).getPosY() + path.get(0).getSize()/2) {
@@ -44,9 +33,14 @@ class Enemy {
      else if (i < path.size()-1) {
         i++;
       }  else {
-      
+        this.enemySpeed = 0;
+        posX = path.get(0).getPosX();
+        posY = path.get(0).getPosY() + path.get(0).getSize()/2; 
+        playerHealth--;
+        i = 0;
       }
       ellipse(posX, posY, path.get(0).getSize()/2, path.get(0).getSize()/2);
+    }
   }
   
   public int getPosX() {

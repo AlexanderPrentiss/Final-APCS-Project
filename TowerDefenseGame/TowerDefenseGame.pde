@@ -1,6 +1,7 @@
 PVector s = new PVector(100, 50);
 String mode = "mainMenu"; //mainMenu, game, pauseMenu, settingsMenu, buildMenu
 String tempMode;
+int playerHealth = 20;
 
 int tempRow;
 int tempCol;
@@ -25,8 +26,6 @@ int[][] basicBitMap = {
 
 Map basic = new Map(basicBitMap);
 Enemy enemy1 = new Enemy(10, 4, basic);
-Enemy enemy2 = new Enemy(5, 6, basic);
-Enemy enemy3 = new Enemy(15, 2, basic);
 
 Button start = new Button(s, "Start", #FFCC00);
 Button settings = new Button(s, "Settings", #B5B5B5);
@@ -47,7 +46,7 @@ Menu settingsMenu = new Menu("Settings", #E44523);
 Button ArcherTowerButton = new Button(s, "Archer", #A58200);
 Menu buildMenu = new Menu("", #FFFFFF);
 
-Enemy[] wave = new Enemy[10];
+//Enemy[] wave = new Enemy[10];
 
 void setup() {
   size(720, 500);
@@ -69,9 +68,9 @@ void setup() {
   buildMenu.addButton(ArcherTowerButton);
   buildMenu.addButton(Back);
   
-  for (int i = 0; i < wave.length; i++) {
-    wave[i] = new Enemy(10, 4, basic);
-  }
+ /* for (int i = 0; i < wave.length; i++) {
+    wave[i] = new Enemy(10, i+1, basic);
+  }*/
   
 }
 
@@ -96,10 +95,12 @@ void draw() {
       quit.changeColor(#FF0000);
     }
   } else if (mode.equals("game")) {
+    textAlign(CENTER);
+    textSize(36);
     basic.drawMap();
-    for (Enemy rhacophorus: wave) {
-      rhacophorus.march();
-    }
+    enemy1.march();
+    fill(#ffffff);
+    text(playerHealth, 19*width/20, height/10);
     
   } else if (mode.equals("buildMenu")) {
     basic.drawMap();
