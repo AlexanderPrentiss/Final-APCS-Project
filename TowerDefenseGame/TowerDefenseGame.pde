@@ -24,7 +24,9 @@ int[][] basicBitMap = {
 };
 
 Map basic = new Map(basicBitMap);
-Enemy enemy1 = new Enemy(100, 2, basic);
+Enemy enemy1 = new Enemy(10, 4, basic);
+Enemy enemy2 = new Enemy(5, 6, basic);
+Enemy enemy3 = new Enemy(15, 2, basic);
 
 Button start = new Button(s, "Start", #FFCC00);
 Button settings = new Button(s, "Settings", #B5B5B5);
@@ -45,7 +47,7 @@ Menu settingsMenu = new Menu("Settings", #E44523);
 Button ArcherTowerButton = new Button(s, "Archer", #A58200);
 Menu buildMenu = new Menu("", #FFFFFF);
 
-
+Enemy[] wave = new Enemy[10];
 
 void setup() {
   size(720, 500);
@@ -67,6 +69,9 @@ void setup() {
   buildMenu.addButton(ArcherTowerButton);
   buildMenu.addButton(Back);
   
+  for (int i = 0; i < wave.length; i++) {
+    wave[i] = new Enemy(10, 4, basic);
+  }
   
 }
 
@@ -92,7 +97,10 @@ void draw() {
     }
   } else if (mode.equals("game")) {
     basic.drawMap();
-    enemy1.march();
+    for (Enemy rhacophorus: wave) {
+      rhacophorus.march();
+    }
+    
   } else if (mode.equals("buildMenu")) {
     basic.drawMap();
     buildMenu.displayMenu();
@@ -166,7 +174,7 @@ void mousePressed() {
           tempRow = row;
           tempCol = col;
           mode = "buildMenu";
-        }  
+        } 
       }
     }
   } else if (mode.equals("mainMenu")) {

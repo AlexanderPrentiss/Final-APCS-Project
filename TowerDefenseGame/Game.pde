@@ -43,7 +43,9 @@ class Enemy {
       }
      else if (i < path.size()-1) {
         i++;
-      }  
+      }  else {
+      
+      }
       ellipse(posX, posY, path.get(0).getSize()/2, path.get(0).getSize()/2);
   }
   
