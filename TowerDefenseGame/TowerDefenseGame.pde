@@ -1,13 +1,16 @@
-PVector s = new PVector(100, 50);
+PVector s = new PVector(125, 50);
 String mode = "mainMenu"; //mainMenu, game, pauseMenu, settingsMenu, buildMenu
 String tempMode;
 int playerHealth = 20;
+int enemySpeed = 4;
+int enemyHealth = 10;
 
 int tempRow;
 int tempCol;
 int tempSize;
 int tempPosX;
 int tempPosY;
+int i = 0;
 
 int width = 720;
 int height = 500;
@@ -25,7 +28,7 @@ int[][] basicBitMap = {
 };
 
 Map basic = new Map(basicBitMap);
-Enemy enemy1 = new Enemy(10, 4, basic);
+Enemy enemy1 = new Enemy(10, 1, basic);
 
 Button start = new Button(s, "Start", #FFCC00);
 Button settings = new Button(s, "Settings", #B5B5B5);
@@ -33,20 +36,22 @@ Button quit = new Button(s, "Quit", #FF0000);
 Menu mainMenu = new Menu("Tower Defenders 4", #E44523);
 
 Button resume = new Button(s, "Resume", #FFCC00);
+Button nextWave = new Button(s, "Next Wave", #FFCC00);
 Button quitToMenu = new Button(s, "Quit to Menu", #FF0000);
 Menu pauseMenu = new Menu("Pause", #E44523);
 
-Button PlayerHealthButton = new Button(s, "Player Health", #FF0000);
-Button EnemyHealthButton = new Button(s, "Enemy Health", #FFBD00);
-Button EnemySpeedButton = new Button(s, "Enemy Speed", #FFCC00);
-Button LevelButton = new Button(s, "Level", #995A00);
+Button PlayerHealthButton = new Button(s, "Player Health: " + playerHealth, #FF0000);
+Button EnemyHealthButton = new Button(s, "Enemy Health: "+ enemyHealth, #FFBD00);
+Button EnemySpeedButton = new Button(s, "Enemy Speed: " + enemySpeed, #FFCC00);
+Button LevelButton = new Button(s, "Level" + ": basic", #995A00);
 Button Back = new Button(s, "Back", #B5B5B5);
 Menu settingsMenu = new Menu("Settings", #E44523);
 
 Button ArcherTowerButton = new Button(s, "Archer", #A58200);
+Button WizardTowerButton = new Button(s, "Wizard", #0099FF);
 Menu buildMenu = new Menu("", #FFFFFF);
 
-//Enemy[] wave = new Enemy[10];
+Enemy[] wave = new Enemy[11];
 
 void setup() {
   size(720, 500);
@@ -56,6 +61,7 @@ void setup() {
   mainMenu.addButton(quit);
 
   pauseMenu.addButton(resume);
+  pauseMenu.addButton(nextWave);
   pauseMenu.addButton(settings);
   pauseMenu.addButton(quitToMenu);
 
@@ -66,11 +72,14 @@ void setup() {
   settingsMenu.addButton(Back);
 
   buildMenu.addButton(ArcherTowerButton);
+  buildMenu.addButton(WizardTowerButton);
   buildMenu.addButton(Back);
   
- /* for (int i = 0; i < wave.length; i++) {
-    wave[i] = new Enemy(10, i+1, basic);
-  }*/
+  for (int i = 0; i < wave.length; i++) {
+    wave[i] = new Enemy(enemyHealth, enemySpeed, basic);
+  }
+  
+  wave[0].destroyEnemy();
   
 }
 
@@ -98,10 +107,21 @@ void draw() {
     textAlign(CENTER);
     textSize(36);
     basic.drawMap();
-    enemy1.march();
+    for (int j = 1; j < wave.length; j++) {
+      if (i > j*75) {
+        wave[j].march();
+      }
+    }
+    for (int row = 0; row < basic.getTileMap().length; row++) {
+      for (int col = 0; col < basic.getTileMap()[row].length; col++) {
+        if (basic.getTileMap()[row][col] instanceof Tower && i % ((Tower)basic.getTileMap()[row][col]).getROF() == 0) {
+          ((Tower)basic.getTileMap()[row][col]).findTarget(wave);
+        }
+      } 
+    }
     fill(#ffffff);
     text(playerHealth, 19*width/20, height/10);
-    
+        i++;
   } else if (mode.equals("buildMenu")) {
     basic.drawMap();
     buildMenu.displayMenu();
@@ -109,6 +129,11 @@ void draw() {
       ArcherTowerButton.changeColor(#7C6100);
     } else {
       ArcherTowerButton.changeColor(#A58200);
+    }
+    if (WizardTowerButton.hover()) {
+      WizardTowerButton.changeColor(#0033CC);
+    } else {
+      WizardTowerButton.changeColor(#0099FF);
     }
     if (Back.hover()) {
       Back.changeColor(#AC0000);
@@ -121,6 +146,11 @@ void draw() {
       resume.changeColor(#D0AC1B);
     } else {
       resume.changeColor(#FFCC00);
+    }
+    if (nextWave.hover()) {
+      nextWave.changeColor(#32CD00);
+    } else {
+      nextWave.changeColor(#3EFF00);
     }
     if (settings.hover()) {
       settings.changeColor(#919191);
@@ -163,6 +193,17 @@ void draw() {
     } else {
       Back.changeColor(#FF0000);
     }
+  } else if (mode.equals("GameOver")) {
+    delay(4000);
+    exit();
+  }
+  if (playerHealth == 0) {
+    background(#C1C1C1);
+    textAlign(CENTER);
+    textSize(72);
+    fill(#FF0000);
+    text("You Lose", width/2, height/2);
+    mode = "GameOver";
   }
 }
 
@@ -201,11 +242,28 @@ void mousePressed() {
       basic.getTileMap()[tempRow][tempCol].setPos(tempPosX, tempPosY);
       mode = "game";
     }
-    if (quit.hover()) {
-      exit();
+    if (WizardTowerButton.hover()) {
+      tempSize = basic.getTileMap()[tempRow][tempCol].getSize();
+      tempPosX = basic.getTileMap()[tempRow][tempCol].getPosX();
+      tempPosY = basic.getTileMap()[tempRow][tempCol].getPosY();
+      basic.getTileMap()[tempRow][tempCol] = new Tower(4, tempSize);
+      basic.getTileMap()[tempRow][tempCol].setPos(tempPosX, tempPosY);
+      mode = "game";
+    }
+    if (Back.hover()) {
+      mode = "game";
     }
   } else if (mode.equals("pauseMenu")) {
     if (resume.hover()) {
+      mode = "game";
+    }
+    if (nextWave.hover()) {
+      i = 0;
+      for (int i = 1; i < wave.length; i++) {
+        wave[i].setPosX(wave[i].getStartingPosX());
+        wave[i].setPosY(wave[i].getStartingPosY());
+        wave[i].reset();
+      }
       mode = "game";
     }
     if (settings.hover()) {
@@ -217,19 +275,34 @@ void mousePressed() {
     }
   } else if (mode.equals("settingsMenu")) {
     if (PlayerHealthButton.hover()) {
-      // increase level by one until it reaches the cap and then reset to 1
+      playerHealth++;
+      if (playerHealth > 30) {
+        playerHealth = 10;
+      }
+      PlayerHealthButton.changeText("Player Health: " + playerHealth);
     }
     if (EnemyHealthButton.hover()) {
-      // increase level by one until it reaches the cap and then reset to 1
+      enemyHealth++;
+      if (enemyHealth > 20) {
+        enemyHealth = 1;
+      }
+      EnemyHealthButton.changeText("Enemy Health: "+ enemyHealth);
     }
     if (EnemySpeedButton.hover()) {
-      // increase level by one until it reaches the cap and then reset to 1
+      enemySpeed++;
+      if (enemySpeed > 20) {
+        enemySpeed = 2;
+      }
+      EnemySpeedButton.changeText("Enemy Speed: " + enemySpeed);
     }
     if (LevelButton.hover()) {
       // increase level by one until it reaches the cap and then reset to 1
     }
     if (Back.hover()) {
       mode = tempMode;
+    }
+    for (int j = 1; j < wave.length; j++) {
+      wave[j].settingsUpdate(enemySpeed, enemyHealth);
     }
   }
 }

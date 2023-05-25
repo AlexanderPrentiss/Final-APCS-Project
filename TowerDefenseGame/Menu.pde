@@ -70,4 +70,8 @@ class Button {
   public void changeColor(color n) {
     this.bc = n;
   }
+  
+  public void changeText(String s) {
+    this.text = s;
+  }
 }
